@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #e3f2fd;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 420px;
+        }
+        h2 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        p {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        button:hover {
+            background: #1976D2;
+        }
+        .links {
+            font-size: 14px;
+            margin-top: 15px;
+        }
+        .links a {
+            color: #2196F3;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Register</h2>
+        <p>Welcome to the Attendance Registration page!<br>Fill in the details to create your account.</p>
+        <input type="text" id="firstName" placeholder="Enter First Name">
+        <input type="text" id="lastName" placeholder="Enter Last Name">
+        <input type="date" id="dob" placeholder="Date of Birth">
+        <select id="gender">
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+        </select>
+        <input type="email" id="email" placeholder="Enter Email ID">
+        <input type="password" id="password" placeholder="Password">
+        <input type="password" id="confirmPassword" placeholder="Confirm Password">
+        <input type="text" id="contact" placeholder="Contact No.">
+        <select id="role">
+            <option value="">Select Role</option>
+            <option value="Student">Student</option>
+            <option value="Teacher">Teacher</option>
+            <option value="Admin">Admin</option>
+        </select>
+        <button onclick="register()">REGISTER</button>
+        <div class="links">
+            <p>Already have an account? <a href="login.html">Login here</a></p>
+        </div>
+    </div>
+
+    <script>
+        async function register() {
+            const firstName = document.getElementById("firstName").value.trim();
+            const lastName = document.getElementById("lastName").value.trim();
+            const dob = document.getElementById("dob").value.trim();
+            const gender = document.getElementById("gender").value;
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value.trim();
+            const confirmPassword = document.getElementById("confirmPassword").value.trim();
+            const contact = document.getElementById("contact").value.trim();
+            const role = document.getElementById("role").value;
+
+            if (!firstName || !lastName || !dob || !gender || !email || !password || !confirmPassword || !contact || !role) {
+                alert("Please fill in all the fields.");
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                alert("Passwords do not match.");
+                return;
+            }
+
+            const response = await fetch("http://localhost:3000/api/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ firstName, lastName, dob, gender, email, password, contact, role })
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                alert("Registration successful! Redirecting to login...");
+                window.location.href = "login.html";
+            } else {
+                alert("Registration failed: " + data.message);
+            }
+        }
+    </script>
+</body>
+</html>
